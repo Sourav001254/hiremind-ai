@@ -1,0 +1,75 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global Security Helper Primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Default safety deny net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 1. Candidates Collection
+    match /candidates/{candidateId} {
+      allow read: if isSignedIn();
+      allow delete: if isSignedIn();
+      allow create: if isSignedIn() 
+                    && incoming().name is string 
+                    && incoming().email is string 
+                    && incoming().score is int 
+                    && incoming().score >= 0 
+                    && incoming().score <= 100;
+      allow update: if isSignedIn() && (
+        incoming().name == existing().name &&
+        incoming().email == existing().email &&
+        incoming().skills is list && 
+        incoming().score is int
+      );
+    }
+
+    // 2. Jobs Collection
+    match /jobs/{jobId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    // 3. Agents Collection
+    match /agents/{agentId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    // 4. Events Collection
+    match /events/{eventId} {
+      allow read: if true;
+      allow write: if false; // Only writable by the backend service account
+    }
+
+    // 5. Audit Logs Collection
+    match /auditLogs/{logId} {
+      allow read: if true;
+      allow write: if false; // Only writable by the backend service account
+    }
+
+    // 6. Bias Report Collection
+    match /biasReport/{reportId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+  }
+}

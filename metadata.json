@@ -1,0 +1,8 @@
+{
+  "name": "HireMind AI v2",
+  "description": "Enterprise autonomous recruiting intelligence command center with candidate parsing, ATS semantic ranking, explainable decisions, and recruiter AI copilot.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

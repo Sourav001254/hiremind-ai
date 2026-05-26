@@ -1,0 +1,139 @@
+{
+  "entities": {
+    "Candidate": {
+      "title": "Candidate",
+      "description": "Extracted candidate profile data used for ATS pipeline evaluations",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "role": { "type": "string" },
+        "email": { "type": "string" },
+        "score": { "type": "integer" },
+        "skills": { "type": "array" },
+        "experience": { "type": "array" },
+        "education": { "type": "array" },
+        "atsScore": { "type": "integer" },
+        "matchBreakdown": { "type": "object" },
+        "shapValues": { "type": "array" },
+        "redFlags": { "type": "array" },
+        "fraudScore": { "type": "integer" },
+        "fraudDetails": { "type": "object" },
+        "roadmap": { "type": "array" }
+      },
+      "required": [
+        "id",
+        "name",
+        "role",
+        "email",
+        "score",
+        "skills",
+        "experience",
+        "education",
+        "atsScore",
+        "matchBreakdown",
+        "shapValues",
+        "redFlags",
+        "fraudScore",
+        "roadmap"
+      ]
+    },
+    "Job": {
+      "title": "Job",
+      "description": "Enterprise job vacancies definitions",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "department": { "type": "string" },
+        "location": { "type": "string" },
+        "type": { "type": "string" },
+        "skillsRequired": { "type": "array" },
+        "description": { "type": "string" }
+      },
+      "required": ["id", "title", "department", "location", "type", "skillsRequired", "description"]
+    },
+    "AgentStatus": {
+      "title": "AgentStatus",
+      "description": "Active settings and runtime heartbeat logging for an autonomous AI agent",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "role": { "type": "string" },
+        "model": { "type": "string" },
+        "status": { "type": "string" },
+        "lastLog": { "type": "string" },
+        "heartbeat": { "type": "string" }
+      },
+      "required": ["id", "name", "role", "model", "status", "lastLog", "heartbeat"]
+    },
+    "SystemEvent": {
+      "title": "SystemEvent",
+      "description": "Micro-services event and messaging topics record log item",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "topic": { "type": "string" },
+        "status": { "type": "string" },
+        "payload": { "type": "object" }
+      },
+      "required": ["id", "timestamp", "topic", "status", "payload"]
+    },
+    "AuditLogItem": {
+      "title": "AuditLogItem",
+      "description": "SOC2 security and compliance pipeline execution audit trail log item",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "action": { "type": "string" },
+        "actor": { "type": "string" },
+        "targetId": { "type": "string" },
+        "details": { "type": "string" },
+        "xaiMetadata": { "type": "object" }
+      },
+      "required": ["id", "timestamp", "action", "actor", "targetId", "details"]
+    },
+    "BiasReport": {
+      "title": "BiasReport",
+      "description": "Sovereign GDPR compliance metrics and alerts summaries",
+      "type": "object",
+      "properties": {
+        "overallFairness": { "type": "integer" },
+        "demographicParity": { "type": "number" },
+        "genderRepresentation": { "type": "object" },
+        "ageDistribution": { "type": "array" },
+        "alerts": { "type": "array" }
+      },
+      "required": ["overallFairness", "demographicParity", "genderRepresentation", "ageDistribution", "alerts"]
+    }
+  },
+  "firestore": {
+    "/candidates/{candidateId}": {
+      "schema": "Candidate",
+      "description": "Candidates managed inside HireMind ATS"
+    },
+    "/jobs/{jobId}": {
+      "schema": "Job",
+      "description": "Corporate vacancy templates available"
+    },
+    "/agents/{agentId}": {
+      "schema": "AgentStatus",
+      "description": "Statuses and metadata trackers for agent orchestrator nodes"
+    },
+    "/events/{eventId}": {
+      "schema": "SystemEvent",
+      "description": "Event bus stream telemetry payloads log"
+    },
+    "/auditLogs/{logId}": {
+      "schema": "AuditLogItem",
+      "description": "Sovereign platform administrative SOC2 logs"
+    },
+    "/biasReport/{reportId}": {
+      "schema": "BiasReport",
+      "description": "EU AI Act gender/ethnic parity results"
+    }
+  }
+}
